@@ -1,41 +1,79 @@
+using chatApp.Database;
+using chatApp.Entities;
+using issuetracker.Api.Helpers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// add controllers
+builder.Services.AddControllers();
+
+// if i want to configure auth options.
+// builder.Services.AddAuthentication();
+// builder.Services.AddAuthorization();
+
+// connect to database
+builder.Services.AddDbContextPool<PostgresContext>(options =>
+{
+  options.UseNpgsql(builder.Configuration.GetSection("Postgres").Get<PostgresConnection>()!.ConnectionString)
+  .UseSnakeCaseNamingConvention()
+  .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+  .EnableSensitiveDataLogging();
+});
+
+// add identity
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+  options.Password.RequireUppercase = false;
+  options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<PostgresContext>()
+.AddDefaultTokenProviders();
+
+
+
+// mapping profiles
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
+
+
+// handle un authorized requists
+builder.Services.ConfigureApplicationCookie(options =>
+{
+  options.Cookie.HttpOnly = false;
+  options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+  options.Cookie.SameSite = SameSiteMode.None;
+
+
+  options.Events.OnRedirectToLogin = context =>
+  {
+    context.Response.Redirect("/api/account/notloggedin");
+    return Task.CompletedTask;
+  };
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+  app.MapOpenApi();
 }
+
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// in case of role authorization
+// app.UseAuthentication();
+// app.UseAuthorization();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+
+app.MapControllers();
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
