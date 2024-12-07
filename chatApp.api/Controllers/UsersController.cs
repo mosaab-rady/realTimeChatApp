@@ -9,19 +9,17 @@ namespace chatApp.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-public class UsersController : ControllerBase
+public class UsersController(
+  UserManager<AppUser> userManager,
+  IMapper mapper) : ControllerBase
 {
+
   // 1) dependencies
-  private readonly UserManager<AppUser> userManager;
-  private readonly IMapper mapper;
+  private readonly UserManager<AppUser> userManager = userManager;
+  private readonly IMapper mapper = mapper;
+
 
   // 2) ctor
-  public UsersController(UserManager<AppUser> userManager, IMapper mapper)
-  {
-    this.userManager = userManager;
-    this.mapper = mapper;
-  }
-
 
   // 3) get all users
   [HttpGet]

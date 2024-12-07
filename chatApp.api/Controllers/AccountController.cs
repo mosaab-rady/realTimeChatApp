@@ -9,21 +9,14 @@ namespace chatApp.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AccountController : ControllerBase
-{
-  private readonly UserManager<AppUser> userManager;
-  private readonly RoleManager<IdentityRole> roleManager;
-  private readonly SignInManager<AppUser> signInManager;
-
-  public AccountController(
+public class AccountController(
     UserManager<AppUser> userManager,
     RoleManager<IdentityRole> roleManager,
-    SignInManager<AppUser> signInManager)
-  {
-    this.userManager = userManager;
-    this.roleManager = roleManager;
-    this.signInManager = signInManager;
-  }
+    SignInManager<AppUser> signInManager) : ControllerBase
+{
+  private readonly UserManager<AppUser> userManager = userManager;
+  private readonly RoleManager<IdentityRole> roleManager = roleManager;
+  private readonly SignInManager<AppUser> signInManager = signInManager;
 
 
 
