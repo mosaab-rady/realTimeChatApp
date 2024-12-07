@@ -16,7 +16,7 @@ public class AppUser : IdentityUser
 
   public DateTime Last_active { get; set; }
 
-  public DateTime Created_at { get; set; }
+  public DateTime Created_at { get; set; } = DateTime.UtcNow;
 
   public List<ChatModel> Chats { get; set; }
 

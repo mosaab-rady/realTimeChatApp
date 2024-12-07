@@ -20,6 +20,6 @@ public class Notification
 
   public bool Is_read { get; set; }
 
-  public DateTime Created_at { get; set; }
+  public DateTime Created_at { get; set; } = DateTime.UtcNow;
 
 }

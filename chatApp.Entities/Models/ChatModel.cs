@@ -13,7 +13,7 @@ public class ChatModel
 
   public Guid Created_by { get; set; }
 
-  public DateTime Created_at { get; set; }
+  public DateTime Created_at { get; set; } = DateTime.UtcNow;
 
   public List<AppUser> Users { get; set; }
 

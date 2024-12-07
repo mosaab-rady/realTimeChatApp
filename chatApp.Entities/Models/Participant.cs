@@ -22,7 +22,7 @@ public class Participant
 
   public RoleType Role { get; set; }
 
-  public DateTime Joined_at { get; set; }
+  public DateTime Joined_at { get; set; } = DateTime.UtcNow;
 }
 
 

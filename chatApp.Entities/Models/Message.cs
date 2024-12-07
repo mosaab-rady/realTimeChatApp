@@ -26,7 +26,7 @@ public class Message
   [Required]
   public string Content { get; set; }
 
-  public DateTime Created_at { get; set; }
+  public DateTime Created_at { get; set; } = DateTime.UtcNow;
 
   public bool Is_read { get; set; }
 }
