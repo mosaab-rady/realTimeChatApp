@@ -1,5 +1,6 @@
 using chatApp.Database;
 using chatApp.Entities;
+using chatApp.Services;
 using issuetracker.Api.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,11 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<PostgresContext>()
 .AddDefaultTokenProviders();
 
-
+// database services to inject it to controllers
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IParticipantService, ParticipantService>();
 
 // mapping profiles
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
