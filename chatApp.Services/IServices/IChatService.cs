@@ -25,6 +25,10 @@ public interface IChatService
   Task<IEnumerable<Message>> GetMessagesByChatIdAsync(Guid chatId);
 
   // 9) get users in chat 
-  Task<IEnumerable<AppUser>> getUsersByChatIdAsync(Guid chatId);
+  Task<IEnumerable<AppUser>> GetChatUsersByChatIdAsync(Guid chatId);
 
+  // 10) add user to chat
+  Task AddUserToChatByChatId(Guid chatId, List<AppUser> users);
+  // 11) add participant to chat
+  Task AddParticipantToChatByChatId(Guid chatId, List<Participant> participants);
 }

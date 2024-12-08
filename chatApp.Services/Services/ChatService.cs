@@ -70,10 +70,31 @@ public class ChatService(PostgresContext dbContext, UserManager<AppUser> userMan
 
 
   // get users that participate in a chat "private chat"
-  public async Task<IEnumerable<AppUser>> getUsersByChatIdAsync(Guid chatId) =>
+  public async Task<IEnumerable<AppUser>> GetChatUsersByChatIdAsync(Guid chatId) =>
    (await dbContext.Chats.Include(chat => chat.Users)
     .FirstOrDefaultAsync(chat => chat.Id == chatId)).Users;
 
 
+  // add users to chat
+  public async Task AddUserToChatByChatId(Guid chatId, List<AppUser> users)
+  {
+    var chatUsers = (await dbContext.Chats.Include(c => c.Users)
+      .FirstOrDefaultAsync(c => c.Id == chatId)).Users;
 
+    chatUsers.AddRange(users);
+
+    await dbContext.SaveChangesAsync();
+  }
+
+
+  // add participant to chat
+  public async Task AddParticipantToChatByChatId(Guid chatId, List<Participant> participants)
+  {
+    var chatParticipants = (await dbContext.Chats.Include(c => c.Participants)
+      .FirstOrDefaultAsync(c => c.Id == chatId)).Participants;
+
+    chatParticipants.AddRange(participants);
+
+    await dbContext.SaveChangesAsync();
+  }
 }
