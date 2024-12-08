@@ -11,7 +11,7 @@ public class ChatModel
 
   public string Name { get; set; }
 
-  public Guid Created_by { get; set; }
+  public string Created_by { get; set; }
 
   public DateTime Created_at { get; set; } = DateTime.UtcNow;
 
@@ -25,7 +25,7 @@ public class ChatModel
 
 public enum ChatType
 {
-  PrivateChat,
-  GroupChat
+  Private,
+  Group
 
 }
