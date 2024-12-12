@@ -18,4 +18,10 @@ public interface INotificationService
   Task DeleteNotificationByIdAsync(Guid id);
   // 7) get the notification user by id
   Task<AppUser> GetNotificationUserAsync(Guid id);
+
+  // 8) get notification by id
+  Task<Notification> GetNotificationByIdAsync(Guid id);
+
+  // 9) get unread notifications for user by user id
+  Task<IEnumerable<Notification>> GetMyUnReadNotificationsAsync(string userId);
 }

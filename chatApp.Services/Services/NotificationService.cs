@@ -40,6 +40,18 @@ public class NotificationService(
   public async Task<IEnumerable<Notification>> GetAllNotificationsAsync() =>
    (await dbContext.Notifications.ToListAsync());
 
+  // get un read notification
+  public async Task<IEnumerable<Notification>> GetMyUnReadNotificationsAsync(string userId)
+  {
+    var notifications = (await userManager.Users.Include(u => u.Notifications)
+    .FirstOrDefaultAsync(u => u.Id == userId)).Notifications;
+    return notifications.Where(n => n.Is_read == false);
+  }
+
+  // get notification 
+  public async Task<Notification> GetNotificationByIdAsync(Guid id) =>
+   await dbContext.Notifications.FindAsync(id);
+
   // get the message that the notification came to him
   public async Task<Message> GetNotificationMessageAsync(Guid id) =>
    (await dbContext.Notifications.Include(n => n.Message)
