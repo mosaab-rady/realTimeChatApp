@@ -42,9 +42,14 @@ public class ParticipantService(PostgresContext dbContext) : IParticipantService
 
 
   // get chat
-  public async Task<ChatModel> getChatInParticipantAsync(Guid id) =>
+  public async Task<ChatModel> GetChatInParticipantAsync(Guid id) =>
    (await dbContext.Participants.Include(participant => participant.Chat)
     .FirstOrDefaultAsync(p => p.Id == id)).Chat;
+
+  // get participant by id
+  public async Task<Participant> GetParticipantByIdAsync(Guid id) =>
+   await dbContext.Participants.FindAsync(id);
+
 
 
   // get participants in chat
@@ -54,7 +59,7 @@ public class ParticipantService(PostgresContext dbContext) : IParticipantService
 
 
   // get user info in a participant
-  public async Task<AppUser> getUserInParticipantAsync(Guid id) =>
+  public async Task<AppUser> GetUserInParticipantAsync(Guid id) =>
    (await dbContext.Participants.Include(p => p.User)
     .FirstOrDefaultAsync(p => p.Id == id)).User;
 
