@@ -37,12 +37,12 @@ public class AccountController(
 
     if (!result.Succeeded)
     {
-      List<string> errors = new List<string>();
+      var errors = new List<string>();
       foreach (var err in result.Errors)
       {
         errors.Add(err.Description);
       }
-      return BadRequest(error: new { errors = errors });
+      return BadRequest(error: new { errors });
     }
 
 
@@ -68,7 +68,7 @@ public class AccountController(
   // login
   // 1) create login dto
   [HttpPost("login")]
-  public async Task<IActionResult> login(LoginDto loginDto)
+  public async Task<IActionResult> Login(LoginDto loginDto)
   {
     // 1) check if user exist
     AppUser user = await userManager.FindByEmailAsync(loginDto.Email);
