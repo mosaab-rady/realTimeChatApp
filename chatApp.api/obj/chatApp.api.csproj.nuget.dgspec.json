@@ -237,7 +237,11 @@
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\Projects\\chatApp\\chatApp.Entities\\chatApp.Entities.csproj": {
+                "projectPath": "D:\\Projects\\chatApp\\chatApp.Entities\\chatApp.Entities.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
