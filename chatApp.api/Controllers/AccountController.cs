@@ -1,3 +1,4 @@
+using AutoMapper;
 using chatApp.Dtos;
 using chatApp.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -12,13 +13,9 @@ namespace chatApp.Api.Controllers;
 public class AccountController(
     UserManager<AppUser> userManager,
     RoleManager<IdentityRole> roleManager,
-    SignInManager<AppUser> signInManager) : ControllerBase
+    SignInManager<AppUser> signInManager,
+    IMapper mapper) : ControllerBase
 {
-  private readonly UserManager<AppUser> userManager = userManager;
-  private readonly RoleManager<IdentityRole> roleManager = roleManager;
-  private readonly SignInManager<AppUser> signInManager = signInManager;
-
-
 
   // 1) sign up new user
   [HttpPost("signup")]
@@ -68,7 +65,7 @@ public class AccountController(
   // login
   // 1) create login dto
   [HttpPost("login")]
-  public async Task<IActionResult> Login(LoginDto loginDto)
+  public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
   {
     // 1) check if user exist
     AppUser user = await userManager.FindByEmailAsync(loginDto.Email);
@@ -92,7 +89,7 @@ public class AccountController(
     }
 
     // 4) return ok or user info
-    return Ok(new { detail = "logged in successfully." });
+    return mapper.Map<UserDto>(user);
   }
 
   // logout
