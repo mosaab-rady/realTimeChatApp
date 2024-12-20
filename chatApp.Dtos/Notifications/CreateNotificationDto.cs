@@ -7,5 +7,5 @@ public class CreateNotificationDto
   [Required]
   public string User_id { get; set; }
   [Required]
-  public string Message_id { get; set; }
+  public Guid Message_id { get; set; }
 }

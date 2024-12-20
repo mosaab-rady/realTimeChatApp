@@ -108,7 +108,7 @@ public class NotificationController(
   public async Task<IActionResult> CreateNotification(CreateNotificationDto createNotificationDto)
   {
     AppUser appUser = await userManager.FindByIdAsync(createNotificationDto.User_id);
-    Message message = await messageService.GetMessageByIdAsync(new Guid(createNotificationDto.Message_id));
+    Message message = await messageService.GetMessageByIdAsync(createNotificationDto.Message_id);
 
     if (appUser is null | message is null)
     {
