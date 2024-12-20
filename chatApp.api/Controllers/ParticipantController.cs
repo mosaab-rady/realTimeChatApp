@@ -76,7 +76,7 @@ public class ParticipantController(
     {
       Chat = chatModel,
       Chat_id = chatModel.Id,
-      Role = createParticipantDto.Role,
+      Role = RoleType.Member,
       User = appUser,
       User_id = appUser.Id
     };
