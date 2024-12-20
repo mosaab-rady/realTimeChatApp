@@ -9,5 +9,4 @@ public class CreateParticipantDto
   public string Chat_id { get; set; }
   [Required]
   public string User_id { get; set; }
-  public RoleType Role { get; set; }
 }

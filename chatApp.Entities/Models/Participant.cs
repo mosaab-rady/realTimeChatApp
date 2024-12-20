@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace chatApp.Entities;
 
@@ -11,6 +12,8 @@ public class Participant
   [Required]
   [ForeignKey("User")]
   public string User_id { get; set; }
+  [Required]
+  [JsonIgnore] // Prevents serialization of this property
   public AppUser User { get; set; }
 
   [Required]
@@ -18,6 +21,7 @@ public class Participant
   public Guid Chat_id { get; set; }
 
   [Required]
+  [JsonIgnore] // Prevents serialization of this property
   public ChatModel Chat { get; set; }
 
   public RoleType Role { get; set; }

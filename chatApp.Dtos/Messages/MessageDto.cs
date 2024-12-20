@@ -9,6 +9,6 @@ public class MessageDto
   public DateTime Created_at { get; set; }
   public bool Is_read { get; set; }
 
-  public ChatDto Chat { get; set; }
-  public UserDto Sender { get; set; }
+  // public ChatDto Chat { get; set; }
+  // public UserDto Sender { get; set; }
 }

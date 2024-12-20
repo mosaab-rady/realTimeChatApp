@@ -21,4 +21,6 @@ public class AppUser : IdentityUser
   public List<ChatModel> Chats { get; set; }
 
   public List<Notification> Notifications { get; set; }
+
+  public List<Participant> Participants { get; set; }
 }
