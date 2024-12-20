@@ -60,39 +60,37 @@ public class NotificationController(
 
   // 4) get my notifications
 
-  [HttpGet("mynotifications")]
-  public async Task<ActionResult<IEnumerable<NotificationDto>>> GetMyNotifications()
-  {
-    string userEmail = User.Identity.Name;
+  // [HttpGet("mynotifications")]
+  // public async Task<ActionResult<IEnumerable<NotificationDto>>> GetMyNotifications()
+  // {
+  //   string userEmail = User.Identity.Name;
 
-    AppUser appUser = await userManager.FindByEmailAsync(userEmail);
+  //   AppUser appUser = await userManager.FindByEmailAsync(userEmail);
 
-    if (appUser is null)
-    {
-      return Problem(
-        detail: $"No user found with email '{userEmail}'.",
-        statusCode: StatusCodes.Status404NotFound
-      );
-    }
+  //   if (appUser is null)
+  //   {
+  //     return Problem(
+  //       detail: $"No user found with email '{userEmail}'.",
+  //       statusCode: StatusCodes.Status404NotFound
+  //     );
+  //   }
 
-    IEnumerable<Notification> notifications = await notificationService.GetUserNotificationsByUserIdAsync(appUser.Id);
+  //   IEnumerable<Notification> notifications = await notificationService.GetUserNotificationsByUserIdAsync(appUser.Id);
 
-    return Ok(mapper.Map<IEnumerable<NotificationDto>>(notifications));
-  }
+  //   return Ok(mapper.Map<IEnumerable<NotificationDto>>(notifications));
+  // }
 
 
   // 5) get un read notification
-  [HttpGet("mynotifications/unread")]
-  public async Task<ActionResult<IEnumerable<NotificationDto>>> GetMyUnReadNotifications()
+  [HttpGet("{userId}/notifications/unread")]
+  public async Task<ActionResult<IEnumerable<NotificationDto>>> GetUserUnReadNotifications(string userId)
   {
-    string userEmail = User.Identity.Name;
-
-    AppUser appUser = await userManager.FindByEmailAsync(userEmail);
+    AppUser appUser = await userManager.FindByIdAsync(userId);
 
     if (appUser is null)
     {
       return Problem(
-        detail: $"No user found with email '{userEmail}'.",
+        detail: $"No user found with id '{userId}'.",
         statusCode: StatusCodes.Status404NotFound
       );
     }
