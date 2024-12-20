@@ -41,6 +41,7 @@ builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IParticipantService, ParticipantService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // mapping profiles
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
