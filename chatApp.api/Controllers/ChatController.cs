@@ -16,7 +16,8 @@ public class ChatController(
   IChatService chatService,
   IMapper mapper,
   UserManager<AppUser> userManager,
-  IParticipantService participantService) : ControllerBase
+  IParticipantService participantService,
+  IUserService userService) : ControllerBase
 {
   // private readonly IChatService chatService = chatService;
   // private readonly IMapper mapper = mapper;
@@ -73,9 +74,9 @@ public class ChatController(
   }
 
 
-  // 4) get user chats
-  [HttpGet("{userId}/chats")]
-  public async Task<IActionResult> GetUserChatsByUserId(string userId)
+  // 4) get user private chats
+  [HttpGet("{userId}/private/chats")]
+  public async Task<IActionResult> GetUserPrivateChatsByUserId(string userId)
   {
     // 1) find user
     AppUser appUser = await userManager.FindByIdAsync(userId);
@@ -88,6 +89,19 @@ public class ChatController(
     }
     // 3) get chats
     IEnumerable<ChatModel> chatModels = await chatService.GetChatsByUserIdAsync(userId);
+
+
+    // if the chat is private, get the other user
+    foreach (var chat in chatModels)
+    {
+      if (chat.Type is ChatType.Private)
+      {
+        IEnumerable<AppUser> chatUsers = await chatService.GetChatUsersByChatIdAsync(chat.Id);
+        // chat.Users = chatUsers.ToList();
+        var secondUser = chatUsers.Where(u => u.Id != appUser.Id).FirstOrDefault();
+        chat.Name = secondUser.FirstName + ' ' + secondUser.LastName;
+      }
+    }
     // 4) return chats
     return Ok(mapper.Map<IEnumerable<ChatDto>>(chatModels));
   }
@@ -123,6 +137,13 @@ public class ChatController(
       return Problem(
         detail: $"No chat found with Id '{chatId}'",
         statusCode: StatusCodes.Status404NotFound);
+    }
+
+    if (chatModel.Type is ChatType.Private)
+    {
+      return Problem(
+        detail: $"The chat with id '{chatId}' is a group chat, No participants",
+        statusCode: StatusCodes.Status400BadRequest);
     }
     // 3) return participants
     IEnumerable<Participant> participants = await chatService.GetParticipantsByChatIdAsync(chatId);
@@ -268,7 +289,7 @@ public class ChatController(
 
   // 12) create group chat
   [HttpPost("group")]
-  public async Task<IActionResult> CreateNewGroupChat(CreateChatDto createChatDto)
+  public async Task<IActionResult> CreateNewGroupChat(CreateGroupChatDto CreateGroupChatDto)
   {
     // the user who created the chat
     var user1Email = User.Identity.Name;
@@ -279,26 +300,60 @@ public class ChatController(
     ChatModel chatModel = new()
     {
       Type = ChatType.Group,
-      Name = createChatDto.Name,
+      Name = CreateGroupChatDto.Name,
       Created_by = user1.Id
     };
     await chatService.CreateNewChatAsync(chatModel);
+
+
+    // create participant
+    await participantService.CreateNewParticipantAsync(new Participant
+    {
+      Chat = chatModel,
+      Chat_id = chatModel.Id,
+      User = user1,
+      User_id = user1.Id,
+      Role = RoleType.Admin
+    });
+
     // 2) return action result
     return CreatedAtAction(
       "CreateNewGroupChat",
       new { detail = "created chat successfully" });
   }
 
-  // 13) get my chats
-  [HttpGet("mychats")]
-  public async Task<IActionResult> GetMyChatsts()
+
+
+  // 13) get user group chats
+  [HttpGet("{userId}/group/chats")]
+  public async Task<IActionResult> GetUserGroupChatsByUserId(string userId)
   {
     // 1) find user
-    var user1Email = User.Identity.Name;
-    var user1 = await userManager.FindByEmailAsync(user1Email);
-    // 2) get chats
-    IEnumerable<ChatModel> chatModels = await chatService.GetChatsByUserIdAsync(user1.Id);
-    // 3) return chats
+    AppUser appUser = await userManager.FindByIdAsync(userId);
+    // 2) if no user return error
+    if (appUser is null)
+    {
+      return Problem(
+        detail: $"No user found with Id '{userId}'",
+        statusCode: StatusCodes.Status404NotFound);
+    }
+    // 3) get chats
+    IEnumerable<ChatModel> chatModels = await userService.GetGroupChatsAsync(userId);
+
+    // 4) return chats
     return Ok(mapper.Map<IEnumerable<ChatDto>>(chatModels));
   }
+
+  // 13) get my chats
+  // [HttpGet("mychats")]
+  // public async Task<IActionResult> GetMyChatsts()
+  // {
+  //   // 1) find user
+  //   var user1Email = User.Identity.Name;
+  //   var user1 = await userManager.FindByEmailAsync(user1Email);
+  //   // 2) get chats
+  //   IEnumerable<ChatModel> chatModels = await chatService.GetChatsByUserIdAsync(user1.Id);
+  //   // 3) return chats
+  //   return Ok(mapper.Map<IEnumerable<ChatDto>>(chatModels));
+  // }
 }
