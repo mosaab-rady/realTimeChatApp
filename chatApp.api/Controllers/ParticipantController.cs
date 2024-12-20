@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace chatApp.Api.Controllers;
 
 [ApiController]
-[Route("api/controller")]
+[Route("api/[controller]")]
 public class ParticipantController(
   IParticipantService participantService,
   IMapper mapper,
