@@ -149,4 +149,24 @@ public class NotificationController(
 
     return NoContent();
   }
+
+  // edit is_read property
+  [HttpPut("{notificationId}/is_read")]
+  public async Task<IActionResult> EditIsRead(Guid notificationId)
+  {
+    Notification notification = await notificationService.GetNotificationByIdAsync(notificationId);
+
+    if (notification is null)
+    {
+      return Problem(
+        detail: $"No Notification found with id '{notificationId}'.",
+        statusCode: StatusCodes.Status404NotFound);
+    }
+    notification.Is_read = true;
+
+    await notificationService.EditNotificationByIdAsync(notification.Id, notification);
+
+    return Ok();
+
+  }
 }
