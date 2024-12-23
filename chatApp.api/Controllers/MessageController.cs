@@ -2,12 +2,13 @@ using AutoMapper;
 using chatApp.Dtos;
 using chatApp.Entities;
 using chatApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace chatApp.Api.Controllers;
 
-
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class MessageController(

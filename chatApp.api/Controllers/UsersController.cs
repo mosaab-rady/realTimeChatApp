@@ -1,11 +1,14 @@
 using AutoMapper;
 using chatApp.Dtos;
 using chatApp.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace chatApp.Api.Controllers;
 
+
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 
