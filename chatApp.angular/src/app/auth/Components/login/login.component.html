@@ -1,0 +1,55 @@
+<div>
+  <form [formGroup]="LoginForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <!-- for error -->
+    <div class="text-danger" *ngIf="!LoginForm.valid">
+      {{LoginForm.errors?.[0]}}
+    </div>
+
+    <!-- Email Input -->
+    <div>
+      <input
+        type="email"
+        placeholder="Email"
+        formControlName="Email"
+        required
+      />
+    </div>
+    <!-- Validations -->
+    <li
+      *ngIf="form['submitted'] && LoginForm.controls.Email.errors?.['required']"
+      class="text-danger mb-0"
+    >
+      Email Is Required
+    </li>
+    <li
+      *ngIf="form['submitted'] && LoginForm.controls.Email.errors?.['email']"
+      class="text-danger mb-0"
+    >
+      Not Valid Email Format
+    </li>
+    <!-- End Of Validations -->
+
+    <!-- Password Input -->
+    <div>
+      <input
+        type="password"
+        placeholder="Password"
+        formControlName="Password"
+        required
+      />
+    </div>
+    <!-- Validations -->
+    <li
+      *ngIf="form['submitted'] && LoginForm.controls.Password.errors?.['required']"
+      class="text-danger mb-0"
+    >
+      Password Is Required
+    </li>
+    <!-- End Of Validations -->
+
+    <!-- submit -->
+    <input type="submit" />
+
+    <!-- End Of Submit -->
+  </form>
+</div>
