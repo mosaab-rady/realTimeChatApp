@@ -112,4 +112,29 @@ public class AccountController(
       statusCode: StatusCodes.Status401Unauthorized);
   }
 
+
+  [HttpGet("isAuthenticted")]
+  public async Task<ActionResult<UserDto>> IsAuthenticated()
+  {
+    if (User.Identity.IsAuthenticated)
+    {
+      AppUser user = await userManager.FindByEmailAsync(User.Identity.Name);
+      UserDto userDto = mapper.Map<UserDto>(user);
+      return userDto;
+    }
+    return Unauthorized();
+  }
+
+  [HttpGet("isEmailUsed")]
+  public async Task<Boolean> IsEmailUsed(string email)
+  {
+    var user = await userManager.FindByEmailAsync(email);
+
+    if (user is null)
+    {
+      return false;
+    }
+    return true;
+  }
+
 }
