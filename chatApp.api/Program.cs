@@ -11,6 +11,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// allow cors
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy(name: "AllowSpecificOrigins", policy =>
+  {
+    policy.WithOrigins("http://localhost:4200");
+    policy.AllowAnyHeader();
+    policy.WithMethods("GET", "POST", "PUT", "DELETE");
+    policy.AllowCredentials();
+  });
+});
+
 // add controllers
 builder.Services.AddControllers();
 
@@ -74,6 +86,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+
+app.UseCors("AllowSpecificOrigins");
 // in case of role authorization
 // app.UseAuthentication();
 // app.UseAuthorization();
