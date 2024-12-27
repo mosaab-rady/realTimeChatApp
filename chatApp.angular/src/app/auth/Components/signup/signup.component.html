@@ -1,1 +1,117 @@
-<p>signup works!</p>
+<div>
+  <form [formGroup]="SignupForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <!-- for error -->
+    <div *ngIf="!SignupForm.valid">
+      {{SignupForm.errors?.[0]}}
+    </div>
+
+    <!-- First name Input -->
+    <div>
+      <input
+        type="string"
+        placeholder="First Name"
+        formControlName="FirstName"
+        required
+      />
+    </div>
+    <!-- Validations -->
+    <li
+      *ngIf="form['submitted'] && SignupForm.controls['FirstName'].errors?.['required']"
+    >
+      First name Is Required
+    </li>
+    <!-- End Of Validations -->
+
+    <!-- Last name Input -->
+    <div>
+      <input
+        type="string"
+        placeholder="Last Name"
+        formControlName="LastName"
+        required
+      />
+    </div>
+    <!-- Validations -->
+    <li
+      *ngIf="form['submitted'] && SignupForm.controls['LastName'].errors?.['required']"
+    >
+      Last name Is Required
+    </li>
+    <!-- End Of Validations -->
+
+    <!-- Email Input -->
+    <div>
+      <input
+        type="email"
+        placeholder="Email"
+        formControlName="Email"
+        required
+      />
+    </div>
+    <!-- Validations -->
+    <li
+      *ngIf="form['submitted'] && SignupForm.controls['Email'].errors?.['required']"
+    >
+      Email Is Required
+    </li>
+    <li
+      *ngIf="form['submitted'] && SignupForm.controls['Email'].errors?.['email']"
+    >
+      Not Valid Email Format
+    </li>
+    <li *ngIf="SignupForm.get('Email')?.hasError('emailUsed')">
+      The Email Is Already Taken Please Use Another Email
+    </li>
+    <!-- End Of Validations -->
+
+    <!-- Password Input -->
+    <div>
+      <input
+        type="password"
+        placeholder="Password"
+        formControlName="Password"
+        required
+      />
+    </div>
+    <!-- Validations -->
+    <li
+      *ngIf="form['submitted'] && SignupForm.controls['Password'].errors?.['required']"
+    >
+      Password Is Required
+    </li>
+    <li
+      *ngIf="
+        form['submitted'] && SignupForm.get('Password')?.hasError('minlength')
+      "
+      class="text-danger"
+    >
+      Password Length Should Be Bigger Than 6
+    </li>
+    <!-- End Of Validations -->
+
+    <!-- Password Input -->
+    <div>
+      <input
+        type="password"
+        placeholder="Confirm Password"
+        formControlName="ConfirmPassword"
+        required
+      />
+    </div>
+    <!-- Validations -->
+    <li
+      *ngIf="form['submitted'] && SignupForm.controls['ConfirmPassword'].errors?.['required']"
+    >
+      Confirm Password Is Required
+    </li>
+    <li *ngIf="passwordMatchError && form['submitted']" class="text-danger">
+      Password And Confirm Password Does Not Match
+    </li>
+    <!-- End Of Validations -->
+
+    <!-- submit -->
+    <input type="submit" />
+
+    <!-- End Of Submit -->
+  </form>
+</div>
