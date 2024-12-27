@@ -134,7 +134,10 @@ public class AccountController(
     {
       return false;
     }
-    return true;
+    else
+    {
+      return true;
+    }
   }
 
 }
