@@ -1,0 +1,19 @@
+<div class="chat-box">
+  <!-- chat name -->
+  <div class="chat-box_name">
+    <p>{{ chat.name }}</p>
+  </div>
+  <!-- chat messages -->
+  <div #messagesSec class="chat-box_messages">
+    <div class="" *ngFor="let message of messages">
+      <app-message [message]="message"></app-message>
+    </div>
+  </div>
+  <!-- new message -->
+  <div class="chat-box_create-message">
+    <app-create-message
+      [chatId]="chat.id"
+      (sendNewMessage)="ReceiveNewMessage($event)"
+    ></app-create-message>
+  </div>
+</div>
