@@ -1,0 +1,17 @@
+<div class="create-message">
+  <form [formGroup]="CreateMessageForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <!--  -->
+    <div>
+      <input
+        type="text"
+        placeholder="Message"
+        formControlName="Content"
+        required
+      />
+    </div>
+    <!--  -->
+
+    <!--  -->
+    <input type="submit" />
+  </form>
+</div>
