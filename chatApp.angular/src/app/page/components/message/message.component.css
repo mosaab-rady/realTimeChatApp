@@ -1,0 +1,14 @@
+.message_content {
+  background-color: rgb(213, 240, 231);
+  border-radius: 0 3rem 3rem 0;
+  padding: 1rem 2rem;
+}
+
+.myMessage {
+  border-radius: 3rem 0 0 3rem;
+  background-color: rgb(124, 166, 205);
+}
+
+.message_createdAt {
+  margin-left: 1rem;
+}

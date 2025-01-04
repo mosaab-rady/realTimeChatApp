@@ -1,0 +1,9 @@
+<div class="message">
+  <p
+    class="message_content"
+    [className]="myMessage ? 'myMessage message_content' : 'message_content'"
+  >
+    {{ message.content }}
+  </p>
+  <p class="message_createdAt">{{ message.created_at }}</p>
+</div>
