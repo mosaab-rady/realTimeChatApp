@@ -76,7 +76,7 @@ public class ChatController(
 
   // 4) get user private chats
   [HttpGet("{userId}/private/chats")]
-  public async Task<IActionResult> GetUserPrivateChatsByUserId(string userId)
+  public async Task<ActionResult<List<ChatDto>>> GetUserPrivateChatsByUserId(string userId)
   {
     // 1) find user
     AppUser appUser = await userManager.FindByIdAsync(userId);
@@ -92,6 +92,7 @@ public class ChatController(
 
 
     // if the chat is private, get the other user
+    List<ChatDto> chatDtos = [];
     foreach (var chat in chatModels)
     {
       if (chat.Type is ChatType.Private)
@@ -100,10 +101,15 @@ public class ChatController(
         // chat.Users = chatUsers.ToList();
         var secondUser = chatUsers.Where(u => u.Id != appUser.Id).FirstOrDefault();
         chat.Name = secondUser.FirstName + ' ' + secondUser.LastName;
+
+
+        ChatDto chatDto = mapper.Map<ChatDto>(chat);
+        chatDto.UserId = secondUser.Id;
+        chatDtos.Add(chatDto);
       }
     }
     // 4) return chats
-    return Ok(mapper.Map<IEnumerable<ChatDto>>(chatModels));
+    return chatDtos;
   }
 
 

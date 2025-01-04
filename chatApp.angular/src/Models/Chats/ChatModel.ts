@@ -4,4 +4,5 @@ export interface ChatModel {
   name: string;
   created_by: string;
   created_at: Date;
+  userId: string; // the id of the second user for private chats
 }
