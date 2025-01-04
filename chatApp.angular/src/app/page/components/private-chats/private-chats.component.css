@@ -1,0 +1,6 @@
+.private-chats_container {
+  border: 1px solid rgb(100, 7, 154);
+  padding: 0 30px;
+  width: fit-content;
+  margin-bottom: 2rem;
+}

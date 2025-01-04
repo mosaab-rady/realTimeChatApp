@@ -1,1 +1,6 @@
-<p>private-chats works!</p>
+<div class="private-chats_container">
+  <h3>Private chats</h3>
+  <div *ngFor="let chat of chats">
+    <app-user-raw [chat]="chat"></app-user-raw>
+  </div>
+</div>
