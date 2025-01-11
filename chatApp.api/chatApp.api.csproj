@@ -28,6 +28,7 @@
     <ProjectReference Include="..\chatApp.Entities\chatApp.Entities.csproj" />
     <ProjectReference Include="..\chatApp.Dtos\chatApp.Dtos.csproj" />
     <ProjectReference Include="..\chatApp.Services\chatApp.Services.csproj" />
+    <ProjectReference Include="..\chatApp.ChatHub\chatApp.ChatHub.csproj" />
   </ItemGroup>
 
 </Project>

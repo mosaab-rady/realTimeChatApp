@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AuthService } from '../../../auth/Services/auth.service';
 import {
   FormControl,
@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 import { MessageService } from '../../Services/message.service';
 import { CreateMessageModel } from '../../../../Models/Messages/CreateMessageModel';
-import { MessageModel } from '../../../../Models/Messages/MessageModel';
 import { CommonModule } from '@angular/common';
+import { SignalRService } from '../../Services/signal-r.service';
 
 @Component({
   selector: 'app-create-message',
@@ -18,15 +18,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './create-message.component.css',
 })
 export class CreateMessageComponent {
-  @Input() chatId: string = '';
-  @Output() sendNewMessage = new EventEmitter<MessageModel>();
-
+  @Input() chatId: string = ''; // the id of the chat
   /**
    *
    */
   constructor(
     private auth: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private signalR: SignalRService
   ) {}
 
   CreateMessageForm: FormGroup = new FormGroup({
@@ -49,12 +48,14 @@ export class CreateMessageComponent {
       sender_id: this.auth.USER!.id, // current user id
       content: this.CreateMessageForm.value.Content,
     };
-    //------------
+    // create the message and send it to chat using signalR
     this.messageService
       .CreateMessage(createMessageModel)
       .subscribe((createdMessage) => {
-        this.sendNewMessage.emit(createdMessage); // add the new created message to chat messages
-        this.CreateMessageForm.reset();
+        // send the message to chat
+        this.signalR.sendMessageToChat(this.chatId, createdMessage);
+
+        this.CreateMessageForm.reset(); // reset the form
       });
   }
 }

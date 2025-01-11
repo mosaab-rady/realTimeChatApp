@@ -2,12 +2,12 @@
   <form [formGroup]="CreateMessageForm" (ngSubmit)="onSubmit()" #form="ngForm">
     <!--  -->
     <div>
-      <input
-        type="text"
+      <!-- text area -->
+      <textarea
         placeholder="Message"
         formControlName="Content"
         required
-      />
+      ></textarea>
     </div>
     <!--  -->
 

@@ -11,9 +11,6 @@
   </div>
   <!-- new message -->
   <div class="chat-box_create-message">
-    <app-create-message
-      [chatId]="chat.id"
-      (sendNewMessage)="ReceiveNewMessage($event)"
-    ></app-create-message>
+    <app-create-message [chatId]="chat.id"></app-create-message>
   </div>
 </div>

@@ -12,6 +12,7 @@ import { MessageModel } from '../../../../Models/Messages/MessageModel';
 import { MessageComponent } from '../message/message.component';
 import { CommonModule } from '@angular/common';
 import { CreateMessageComponent } from '../create-message/create-message.component';
+import { SignalRService } from '../../Services/signal-r.service';
 
 @Component({
   selector: 'app-chat-box',
@@ -27,7 +28,10 @@ export class ChatBoxComponent implements OnInit, AfterViewChecked {
   /**
    *
    */
-  constructor(private chatService: ChatService) {}
+  constructor(
+    private chatService: ChatService,
+    private signalR: SignalRService
+  ) {}
 
   ngAfterViewChecked(): void {
     this.ScrollToBottom();
@@ -35,6 +39,11 @@ export class ChatBoxComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.GetChatMessages();
+    this.signalR.connectToChat(this.chat.id);
+    // listen to new messages
+    this.signalR.addReceiveMessageListener().subscribe((message) => {
+      this.messages.push(message);
+    });
   }
   // scroll to the last message
   ScrollToBottom() {
@@ -45,11 +54,11 @@ export class ChatBoxComponent implements OnInit, AfterViewChecked {
   GetChatMessages() {
     this.chatService
       .GetChatMessages(this.chat.id)
-      .subscribe((messages) => (this.messages = messages));
-  }
-
-  // receive new message from create message component
-  ReceiveNewMessage(newMessage: MessageModel) {
-    this.messages.push(newMessage);
+      .subscribe(
+        (messages) =>
+          (this.messages = messages.sort((a, b) =>
+            a.created_at > b.created_at ? 1 : -1
+          ))
+      );
   }
 }
