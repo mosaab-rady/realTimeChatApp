@@ -1,3 +1,4 @@
+using chatApp.ChatHub;
 using chatApp.Database;
 using chatApp.Entities;
 using chatApp.Services;
@@ -10,6 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// add signalR for real time communication
+builder.Services.AddSignalR();
 
 // allow cors
 builder.Services.AddCors(options =>
@@ -95,6 +99,8 @@ app.UseCors("AllowSpecificOrigins");
 
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chatHub"); // add signalR hub
 
 app.Run();
 
